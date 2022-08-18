@@ -1,0 +1,29 @@
+keycloak:
+  auth-server-url: ${KEYCLOAK_URL}
+  realm: ${KEYCLOAK_REALM}
+  resource: ${KEYCLOAK_RESOURCE}
+  public-client: true
+  enabled: true
+spring:
+  application:
+    name: ${APPLICATION_NAME:Notification}
+    port: 8080
+  jpa:
+    generate-ddl: false
+  datasource:
+    name: Notification
+    driver-class-name: org.postgresql.Driver
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL}
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.xml
+    enabled: ${LIQUIBASE_ENABLED:true}
+    drop-first: ${LIQUIBASE_DROP_FIRST:false}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${KAFKA_SOBT_CONSUMER_GROUP_ID}
+logging:
+  level:
+    sql: debug
