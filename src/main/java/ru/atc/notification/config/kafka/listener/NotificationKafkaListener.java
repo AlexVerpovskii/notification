@@ -16,7 +16,7 @@ public class NotificationKafkaListener {
 
 	@KafkaListener(topics = KafkaTopic.NOTIFICATION)
 	public void notificationServiceListener(KafkaMessage message) {
-		log.info("get message");
+		log.info("get message"); // TODO Для отладки используй debug логирования, иначе нужно более информативное сообщение
 		notificationService.createNotification(message);
 	}
 }

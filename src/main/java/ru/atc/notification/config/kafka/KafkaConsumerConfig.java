@@ -32,7 +32,7 @@ public class KafkaConsumerConfig {
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId);
-		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*"); // TODO Безопасненько :)
 		return props;
 	}
 

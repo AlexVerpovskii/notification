@@ -25,11 +25,17 @@ public class KafkaProducerConfigTest {
 	@Bean
 	public Map<String, Object> producerConfigs() {
 
-		Map<String, Object> props = new HashMap<>();
-
+		Map<String, Object> props = new HashMap<>(); // TODO final
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+		// TODO Так ведь лучше?
+		props = Map.of(
+				ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer,
+				ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+				ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
+		);
 
 		return props;
 	}

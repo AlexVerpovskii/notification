@@ -19,9 +19,11 @@ import ru.atc.notification.util.filter.NotificationFilter;
 import ru.atc.notification.util.specification.NotificationSpecification;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public ResponseNotificationDTO getNotificationDtoAll(NotificationFilter filter) {
-		final var notification = this.getNotificationEntityAll(filter);
+		final var notification = this.getNotificationEntityAll(filter); // TODO В чем смысл this?
 		return ResponseNotificationDTO.builder()
 				.data(notification
 						.stream()
@@ -56,15 +58,15 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public Long getNotificationCount(NotificationFilter filter) {
-		final var notification = this.getNotificationEntityAll(filter);
-		return (long) notification.size();
+		final var notification = this.getNotificationEntityAll(filter); // TODO В чем смысл this?
+		return (long) notification.size(); // TODO Для чего нужно здесь преобразование?
 	}
 
 	@Override
 	public void createNotification(KafkaMessage message) {
 		final var notification = messageToNotificationConverter.convert(message);
-		final var countMessage = new WebSocketMessage();
-		if (nonNull(notification)) {
+		final var countMessage = new WebSocketMessage(); // TODO используется только внутри if, надо перенести туда
+		if (nonNull(notification)) { // TODO такое в принципе невозможно, иначе у тебя упадет еще в конвертере
 			repository.save(notification);
 			countMessage.setCount(repository.countNotificationByUserAndService(notification.getServiceId(),
 					notification.getUserId()));
@@ -72,6 +74,17 @@ public class NotificationServiceImpl implements NotificationService {
 		} else {
 			log.warn("invalid message");
 		}
+
+		// TODO Можно переписать в более функциональном стиле
+		/*
+		ofNullable(notification).ifPresentOrElse(n -> {
+			final var countMessage = new WebSocketMessage();
+			repository.save(notification);
+			countMessage.setCount(repository.countNotificationByUserAndService(notification.getServiceId(), // TODO Результат вызова репозитория стоит вынести в отдельную переменную
+					notification.getUserId()));
+			webSocketService.send(notification.getUserId(), WebSocketUrl.PATH, countMessage);
+		}, () -> log.warn("Received invalid message: {}", message));
+		*/
 	}
 
 }

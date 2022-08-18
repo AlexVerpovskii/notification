@@ -20,7 +20,7 @@ public class KafkaMessageToNotificationConverter implements Converter<KafkaMessa
 	public NotificationEntity convert(KafkaMessage source) {
 		final var entity = new NotificationEntity();
 		entity.setTitle(source.getTitle());
-		entity.setStatus(StatusEnum.N);
+		entity.setStatus(StatusEnum.N); // TODO Я вне контекста, но это странно устанавливать по умолчанию не прочитанный статус
 		entity.setDescription(source.getDescription());
 		entity.setSysCrt(timeUtils.now());
 		entity.setTypeId(source.getTypeId());

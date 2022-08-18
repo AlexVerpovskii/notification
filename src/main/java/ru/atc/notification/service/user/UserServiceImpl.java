@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+// TODO в чем смысл такого сервиса как бина? Не лучше ли сделать статичный метод с параметром Authentication
 public class UserServiceImpl implements UserService {
 
 	public String getUserName() {
