@@ -16,7 +16,6 @@ public class NotificationKafkaListener {
 
 	@KafkaListener(topics = KafkaTopic.NOTIFICATION)
 	public void notificationServiceListener(KafkaMessage message) {
-		log.info("get message");
 		notificationService.createNotification(message);
 	}
 }

@@ -13,7 +13,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import ru.atc.notification.model.message.KafkaMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -27,13 +26,13 @@ public class KafkaConsumerConfig {
 	private String kafkaGroupId;
 
 	public Map<String, Object> consumerConfigs() {
-		Map<String, Object> props = new HashMap<>();
-		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
-		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId);
-		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-		return props;
+		return Map.of(
+				ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer,
+				ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+				ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class,
+				ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId,
+				JsonDeserializer.TRUSTED_PACKAGES, "*"
+		);
 	}
 
 	public ConsumerFactory<String, KafkaMessage> consumerFactory() {

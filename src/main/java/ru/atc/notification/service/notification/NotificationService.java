@@ -12,7 +12,7 @@ public interface NotificationService {
 
 	ResponseNotificationDTO getNotificationDtoAll(NotificationFilter filter);
 
-	Long getNotificationCount(NotificationFilter filter);
+	int getNotificationCount(NotificationFilter filter);
 
 	void createNotification(KafkaMessage message);
 }

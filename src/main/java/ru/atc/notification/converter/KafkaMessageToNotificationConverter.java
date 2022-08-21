@@ -2,12 +2,9 @@ package ru.atc.notification.converter;
 
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import ru.atc.notification.model.entity.NotificationEntity;
 import ru.atc.notification.model.message.KafkaMessage;
-import ru.atc.notification.service.user.UserService;
 import ru.atc.notification.util.TimeUtils;
 import ru.atc.notification.util.enums.StatusEnum;
 

@@ -1,10 +1,7 @@
 package ru.atc.notification.service.notification;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.atc.notification.converter.KafkaMessageToNotificationConverter;
 import ru.atc.notification.service.webSocket.WebSocketService;
@@ -21,7 +18,7 @@ import ru.atc.notification.util.specification.NotificationSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public ResponseNotificationDTO getNotificationDtoAll(NotificationFilter filter) {
-		final var notification = this.getNotificationEntityAll(filter);
+		final var notification = getNotificationEntityAll(filter);
 		return ResponseNotificationDTO.builder()
 				.data(notification
 						.stream()
@@ -55,23 +52,20 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public Long getNotificationCount(NotificationFilter filter) {
-		final var notification = this.getNotificationEntityAll(filter);
-		return (long) notification.size();
+	public int getNotificationCount(NotificationFilter filter) {
+		final var notification = getNotificationEntityAll(filter);
+		return notification.size();
 	}
 
 	@Override
 	public void createNotification(KafkaMessage message) {
 		final var notification = messageToNotificationConverter.convert(message);
-		final var countMessage = new WebSocketMessage();
-		if (nonNull(notification)) {
-			repository.save(notification);
-			countMessage.setCount(repository.countNotificationByUserAndService(notification.getServiceId(),
-					notification.getUserId()));
+		ofNullable(notification).ifPresentOrElse(n -> {
+			final var countMessage = new WebSocketMessage();
+			countMessage.setCount(repository.countNotificationByUserAndService(notification.getUserId(),
+					notification.getServiceId()));
 			webSocketService.send(notification.getUserId(), WebSocketUrl.PATH, countMessage);
-		} else {
-			log.warn("invalid message");
-		}
+		}, () -> log.warn("Received invalid message: {}", message));
 	}
 
 }

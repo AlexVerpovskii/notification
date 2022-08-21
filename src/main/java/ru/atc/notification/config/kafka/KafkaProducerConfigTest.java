@@ -13,7 +13,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.atc.notification.model.message.KafkaMessage;
 import ru.atc.notification.util.singleton.KafkaTopic;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -25,13 +24,11 @@ public class KafkaProducerConfigTest {
 	@Bean
 	public Map<String, Object> producerConfigs() {
 
-		Map<String, Object> props = new HashMap<>();
-
-		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
-		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
-		return props;
+		return Map.of(
+				ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer,
+				ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+				ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
+		);
 	}
 
 	@Bean("producerFactory")
