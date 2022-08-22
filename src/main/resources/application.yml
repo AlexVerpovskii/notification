@@ -4,10 +4,11 @@ keycloak:
   resource: ${KEYCLOAK_RESOURCE}
   public-client: true
   enabled: true
+server:
+  port: ${SERVER_PORT}
 spring:
   application:
     name: ${APPLICATION_NAME:Notification}
-    port: 8080
   jpa:
     generate-ddl: false
   datasource:
