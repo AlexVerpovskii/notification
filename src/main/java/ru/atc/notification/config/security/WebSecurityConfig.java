@@ -30,11 +30,6 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 		authManagerBuilder.authenticationProvider(keycloakAuthenticationProvider);
 	}
 
-	@Bean
-	public KeycloakConfigResolver keycloakConfigResolver() {
-		return new KeycloakSpringBootConfigResolver();
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		super.configure(http);
