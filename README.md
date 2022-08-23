@@ -29,3 +29,7 @@
 
 `u can disable security`
 `keycloak.enable set false`
+
+#### Swagger
+
+`http://localhost:8080/swagger-ui/#/`

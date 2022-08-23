@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.atc.notification.service.kafkaTest.KafkaServiceTest;
 import ru.atc.notification.model.message.KafkaMessage;
+import ru.atc.notification.service.user.UserService;
 import ru.atc.notification.util.singleton.KafkaTopic;
 
 @Slf4j
@@ -17,6 +18,7 @@ import ru.atc.notification.util.singleton.KafkaTopic;
 @RequestMapping("kafka")
 public class KafkaTestController {
 	private final KafkaServiceTest<KafkaMessage> service;
+	private final UserService userService;
 
 	@GetMapping(value = "/")
 	public void test() {
@@ -25,8 +27,7 @@ public class KafkaTestController {
 		message.setDescription("test description");
 		message.setServiceId("test service");
 		message.setTypeId("create proposal");
-		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		message.setUserId(authentication.getName());
+		message.setUserId(userService.getName());
 		service.sendMessage(KafkaTopic.NOTIFICATION, message);
 		log.debug("send message");
 	}
