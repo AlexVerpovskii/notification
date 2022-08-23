@@ -1,5 +1,6 @@
 package ru.atc.notification.controller.notification;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,9 +16,11 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("notification")
+@Tag(name = "The Notification API", description = "Rest controller")
 public class NotificationController {
 	private final NotificationService service;
 
+	@Tag(name = "The Notification API", description = "Get all notification")
 	@GetMapping(value = "/")
 	public ResponseEntity<ResponseNotificationListDTO> getAll(NotificationFilter filter) {
 		final var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,6 +33,7 @@ public class NotificationController {
 		}
 	}
 
+	@Tag(name = "The Notification API", description = "Read notification")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ResponseNotificationDTO> read(@PathVariable("id") Long id) {
 		try {
