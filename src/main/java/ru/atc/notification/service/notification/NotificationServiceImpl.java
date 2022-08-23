@@ -64,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
 		final var notification = messageToNotificationConverter.convert(message);
 		ofNullable(notification).ifPresentOrElse(n -> {
 			final var countMessage = new WebSocketMessage();
-			repository.save(notification);
+			repository.save(notification); // TODO must be n
 			countMessage.setCount(repository.countNotificationByUserAndService(notification.getUserId(),
 					notification.getServiceId()));
 			webSocketService.send(notification.getUserId(), WebSocketUrl.PATH, countMessage);
