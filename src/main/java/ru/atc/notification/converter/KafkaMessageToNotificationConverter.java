@@ -22,6 +22,7 @@ public class KafkaMessageToNotificationConverter implements Converter<KafkaMessa
 		entity.setSysCrt(timeUtils.now());
 		entity.setTypeId(source.getTypeId());
 		entity.setUserId(source.getUserId());
+		entity.setServiceId(source.getServiceId());
 		return entity;
 	}
 }

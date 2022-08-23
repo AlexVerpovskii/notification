@@ -1,24 +1,30 @@
 package ru.atc.notification.config.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 @ConditionalOnProperty(name = "keycloak.enabled", havingValue = "false")
-public class DisableSecurityConfiguration {
+@Order(value = Ordered.HIGHEST_PRECEDENCE)
+public class DisableSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	@Override
+	public void configure(WebSecurity web) {
+		web
+				.ignoring()
+				.antMatchers("/**");
+	}
 
-		http.csrf()
-				.disable()
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
 				.authorizeRequests()
-				.anyRequest()
+				.antMatchers("/")
 				.permitAll();
-
-		return http.build();
 	}
 }
